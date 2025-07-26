@@ -1,11 +1,13 @@
 import { FastifyInstance } from 'fastify'
+import { authMiddleware } from '../plugins/authMiddleware'
 
 /* eslint-disable @typescript-eslint/require-await */
 export default async function orderRoutes(app: FastifyInstance) {
   /* Create new order */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
   app.post('/orders', async (req, reply) => {
-    /* TODO */
+    await authMiddleware(req, reply)
+    return reply.send({ user: req.user })
   })
 
   /* List all orders */
