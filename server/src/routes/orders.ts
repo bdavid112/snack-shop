@@ -4,13 +4,13 @@ import { FastifyInstance } from 'fastify'
 export default async function orderRoutes(app: FastifyInstance) {
   /* Create new order */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  app.post('/order', async (req, reply) => {
+  app.post('/orders', async (req, reply) => {
     /* TODO */
   })
 
   /* List all orders */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  app.post('/login', async (req, reply) => {
+  app.get('/orders', async (req, reply) => {
     /* TODO */
   })
 }

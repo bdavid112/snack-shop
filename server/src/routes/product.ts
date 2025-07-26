@@ -3,9 +3,10 @@ import { FastifyInstance } from 'fastify'
 /* eslint-disable @typescript-eslint/require-await */
 export default async function productRoutes(app: FastifyInstance) {
   /* List all products */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
   app.get('/products', async (req, reply) => {
-    /* TODO */
+    const products = await app.prisma.product.findMany()
+    reply.send(products)
   })
 
   /* Add new product (admin only) */

@@ -4,20 +4,20 @@ A full-stack web application for managing and ordering snacks. Built with **Fast
 
 ## 🧱 Tech Stack
 
-* **Backend**: Fastify (Node.js), Prisma ORM
-* **Database**: PostgreSQL (Docker)
-* **Frontend**: React, Vite, Tailwind CSS v3, Axios, TypeScript
-* **Dev Tools**: Docker, Prisma Studio, VS Code
+- **Backend**: Fastify (Node.js), Prisma ORM
+- **Database**: PostgreSQL (Docker)
+- **Frontend**: React, Vite, Tailwind CSS v3, Axios, TypeScript
+- **Dev Tools**: Docker, Prisma Studio, VS Code
 
 ---
 
 ## 🛠 Tooling
 
-* **Linting**: ESLint (with TypeScript support)
-* **Formatting**: Prettier
-* **ORM**: Prisma
-* **Containerization**: Docker
-* **Dev Environment**: VS Code with recommended extensions
+- **Linting**: ESLint (with TypeScript support)
+- **Formatting**: Prettier
+- **ORM**: Prisma
+- **Containerization**: Docker
+- **Dev Environment**: VS Code with recommended extensions
 
 ---
 
@@ -54,9 +54,9 @@ docker-compose up --build
 
 This will:
 
-* Start the Fastify API on `http://localhost:3000`
-* Spin up a PostgreSQL DB on port `5432`
-* Automatically run Prisma migrations
+- Start the Fastify API on `http://localhost:3000`
+- Spin up a PostgreSQL DB on port `5432`
+- Automatically run Prisma migrations
 
 To stop:
 
@@ -72,35 +72,34 @@ All endpoints use JSON and are prefixed under `/api`.
 
 ### 🧑 Auth
 
-* `POST /api/register`
+- `POST /api/register`
   Register a new user (username, password)
 
-* `POST /api/login`
+- `POST /api/login`
   Log in (username, password)
   **Returns:** `{ authenticated: true|false, isAdmin: true|false }`
 
 ### 🍿 Products
 
-* `GET /api/products`
+- `GET /api/products`
   List all snack products (public)
 
-* `POST /api/products`
+- `POST /api/products`
   Add a new product (admin only)
 
-* `PUT /api/products/:id`
+- `PUT /api/products/:id`
   Edit a product (admin only)
 
-* `DELETE /api/products/:id`
+- `DELETE /api/products/:id`
   Delete a product (admin only)
 
 ### 🛒 Orders
 
-* `POST /api/order`
+- `POST /api/order`
   Submit an order (user, cart items)
+  - Checks stock, decreases inventory, saves order
 
-  * Checks stock, decreases inventory, saves order
-
-* `GET /api/orders`
+- `GET /api/orders`
   List all orders (admin only)
 
 ---
