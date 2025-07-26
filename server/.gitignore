@@ -3,3 +3,5 @@ build/
 *.sqlite
 *.log
 .env*
+
+/src/generated/prisma
