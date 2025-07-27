@@ -1,0 +1,1 @@
+CREATE DATABASE snackshop_test;

@@ -5,7 +5,6 @@ import { authMiddleware } from '../plugins/authMiddleware'
 /* eslint-disable @typescript-eslint/require-await */
 export default async function authRoutes(app: FastifyInstance) {
   /* Register a new user */
-
   app.post('/register', async (req, reply) => {
     const { username, password } = req.body as {
       username: string
@@ -33,7 +32,6 @@ export default async function authRoutes(app: FastifyInstance) {
   })
 
   /* Login */
-
   app.post('/login', async (req, reply) => {
     const { username, password } = req.body as {
       username: string
@@ -46,7 +44,7 @@ export default async function authRoutes(app: FastifyInstance) {
       if (!result.authenticated) return reply.status(401).send({ message: 'Not authenticated' })
 
       /* Set a signed cookie */
-      reply.setCookie('session', username, {
+      reply.setCookie('session', JSON.stringify({ username, isAdmin: result.isAdmin }), {
         path: '/',
         httpOnly: true,
         sameSite: 'lax',

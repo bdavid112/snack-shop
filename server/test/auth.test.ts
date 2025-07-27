@@ -108,6 +108,7 @@ describe('Session Authentication', () => {
     expect(protectedRes.status).toBe(200)
     expect((protectedRes.body as { user: { username: string } }).user).toEqual({
       username: 'admin',
+      isAdmin: true,
     })
   })
 
@@ -123,7 +124,7 @@ describe('Session Authentication', () => {
     const logoutRes = await request(app.server).post('/api/logout').set('Cookie', cookie)
 
     expect(logoutRes.status).toBe(200)
-    expect(logoutRes.body as { message: string }).toBe('Logged out successfully')
+    expect((logoutRes.body as { message: string }).message).toBe('Logged out successfully')
     expect(logoutRes.headers['set-cookie']).toBeDefined()
     expect(logoutRes.headers['set-cookie'][0]).toMatch(/session=;/)
   })

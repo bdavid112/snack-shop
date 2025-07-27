@@ -1,7 +1,16 @@
-import { execSync } from 'child_process'
-import { beforeEach } from 'vitest'
+import { beforeEach, afterEach } from 'vitest'
+import { getTestPrisma } from './test/utils/getPrisma'
 
-beforeEach(() => {
-  /* Run the seed script before each tests */
-  execSync('ts-node prisma/seed.ts')
+import seed from './prisma/seed'
+
+let prisma: Awaited<ReturnType<typeof getTestPrisma>>
+
+beforeEach(async () => {
+  prisma = await getTestPrisma()
+  await prisma.$executeRawUnsafe('BEGIN')
+  await seed(prisma)
+})
+
+afterEach(async () => {
+  await prisma.$executeRawUnsafe('ROLLBACK')
 })

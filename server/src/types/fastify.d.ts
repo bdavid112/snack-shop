@@ -7,6 +7,7 @@ declare module 'fastify' {
   interface FastifyRequest {
     user?: {
       username: string
+      isAdmin: boolean
     }
   }
 }

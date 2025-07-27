@@ -17,7 +17,7 @@ model User {
 
 model Product {
   id          Int         @id @default(autoincrement())
-  name        String
+  name        String      @unique
   price       Int
   stock       Int
   discount    Int?
@@ -28,18 +28,18 @@ model Product {
 
 model Order {
   id         Int         @id @default(autoincrement())
-  user       User        @relation(fields: [user_id], references: [id], onDelete: Cascade)
   user_id    Int
   total      Int
   created_at DateTime    @default(now())
+  user       User        @relation(fields: [user_id], references: [id], onDelete: Cascade)
   items      OrderItem[]
 }
 
 model OrderItem {
   id         Int     @id @default(autoincrement())
-  order      Order   @relation(fields: [order_id], references: [id], onDelete: Cascade)
   order_id   Int
-  product    Product @relation(fields: [product_id], references: [id], onDelete: Cascade)
   product_id Int
   quantity   Int
+  order      Order   @relation(fields: [order_id], references: [id], onDelete: Cascade)
+  product    Product @relation(fields: [product_id], references: [id], onDelete: Cascade)
 }

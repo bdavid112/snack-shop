@@ -4,7 +4,6 @@ import { authMiddleware } from '../plugins/authMiddleware'
 /* eslint-disable @typescript-eslint/require-await */
 export default async function orderRoutes(app: FastifyInstance) {
   /* Create new order */
-
   app.post('/orders', async (req, reply) => {
     await authMiddleware(req, reply)
     return reply.send({ user: req.user })
