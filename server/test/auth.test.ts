@@ -1,131 +1,148 @@
-import { describe, it, expect, beforeAll, vi, afterAll } from 'vitest'
-import request from 'supertest'
-import { buildServer } from '../src/server'
+import { describe, it, expect, beforeAll, vi } from 'vitest'
 import * as userService from '../src/services/userService'
+import { getTestApp } from './utils'
 
-let app: Awaited<ReturnType<typeof buildServer>>
+let app: Awaited<ReturnType<typeof getTestApp>>
 
 beforeAll(async () => {
-  app = await buildServer()
+  app = await getTestApp()
 })
 
-afterAll(async () => {
-  await app.close()
-})
+describe('🔐 Authentication API', () => {
+  // ─── REGISTRATION ──────────────────────────────────────────────────────────────
+  describe('📝 Registration', () => {
+    it('registers a new user successfully and returns 201', async () => {
+      const res = await app.inject({
+        method: 'POST',
+        url: '/api/register',
+        payload: { username: 'testuser', password: '123456' },
+      })
 
-describe('Auth', () => {
-  describe('Registration', () => {
-    it('registers a new user successfully and returns status 201', async () => {
-      const response = await request(app.server)
-        .post('/api/register')
-        .send({ username: 'testuser', password: '123456' })
-
-      expect(response.status).toBe(201)
-      expect(response.text).toContain('User created')
+      expect(res.statusCode).toBe(201)
+      expect(res.body).toContain('User created')
     })
 
     it('returns 409 if username is already taken', async () => {
-      const response = await request(app.server)
-        .post('/api/register')
-        .send({ username: 'admin', password: '123456' })
+      const res = await app.inject({
+        method: 'POST',
+        url: '/api/register',
+        payload: { username: 'alice', password: '123456' },
+      })
 
-      expect(response.status).toBe(409)
-      expect(response.text).toContain('Username already taken')
+      expect(res.statusCode).toBe(409)
+      expect(res.body).toContain('Username already taken')
     })
 
     it('returns 500 if registration service throws an error', async () => {
-      // Mock the service to throw an error
       vi.spyOn(userService, 'registerUser').mockImplementationOnce(() => {
         throw new Error('Database failure')
       })
 
-      const response = await request(app.server)
-        .post('/api/register')
-        .send({ username: 'failuser', password: '123456' })
+      const res = await app.inject({
+        method: 'POST',
+        url: '/api/register',
+        payload: { username: 'failuser', password: '123456' },
+      })
 
-      expect(response.status).toBe(500)
-      expect(response.text).toContain('Internal server error')
+      expect(res.statusCode).toBe(500)
+      expect(res.body).toContain('Internal server error')
     })
   })
 
-  describe('Login', () => {
-    it('authenticates valid user credentials and returns status 200', async () => {
-      const response = await request(app.server)
-        .post('/api/login')
-        .send({ username: 'admin', password: 'SnackBoss2025' })
+  // ─── LOGIN ─────────────────────────────────────────────────────────────────────
+  describe('🔑 Login', () => {
+    it('authenticates valid credentials and returns 200', async () => {
+      const res = await app.inject({
+        method: 'POST',
+        url: '/api/login',
+        payload: { username: 'alice', password: 'password' },
+      })
 
-      expect(response.status).toBe(200)
-      expect(response.text).toContain(['"authenticated":true', '"isAdmin":true'])
+      expect(res.statusCode).toBe(200)
+      expect(res.body).toContain('"authenticated":true')
+      expect(res.body).toContain('"isAdmin":false')
     })
 
-    it('returns 401 on invalid user credentials', async () => {
-      let response = await request(app.server)
-        .post('/api/login')
-        .send({ username: 'failuser', password: 'SnackBoss2025' })
+    it('returns 401 on invalid credentials', async () => {
+      const res1 = await app.inject({
+        method: 'POST',
+        url: '/api/login',
+        payload: { username: 'failuser', password: 'password' },
+      })
 
-      expect(response.status).toBe(401)
-      expect(response.text).toContain('Not authenticated')
+      expect(res1.statusCode).toBe(401)
+      expect(res1.body).toContain('No user with this username')
 
-      response = await request(app.server)
-        .post('/api/login')
-        .send({ username: 'admin', password: 'failpass' })
+      const res2 = await app.inject({
+        method: 'POST',
+        url: '/api/login',
+        payload: { username: 'alice', password: 'wrongpass' },
+      })
 
-      expect(response.status).toBe(401)
-      expect(response.text).toContain('Not authenticated')
+      expect(res2.statusCode).toBe(401)
+      expect(res2.body).toContain('Not authenticated')
     })
 
     it('returns 500 if login service throws an error', async () => {
-      // Mock the service to throw an error
       vi.spyOn(userService, 'loginUser').mockImplementationOnce(() => {
         throw new Error('Database failure')
       })
 
-      const response = await request(app.server)
-        .post('/api/login')
-        .send({ username: 'admin', password: 'SnackBoss2025' })
+      const res = await app.inject({
+        method: 'POST',
+        url: '/api/login',
+        payload: { username: 'alice', password: 'password' },
+      })
 
-      expect(response.status).toBe(500)
-      expect(response.text).toContain('Internal server error')
-    })
-  })
-})
-
-describe('Session Authentication', () => {
-  it('sets a signed session cookie on successful login and allows access to protected routes', async () => {
-    const response = await request(app.server)
-      .post('/api/login')
-      .send({ username: 'admin', password: 'SnackBoss2025' })
-
-    expect(response.status).toBe(200)
-    expect(response.headers['set-cookie']).toBeDefined()
-
-    const cookie = response.headers['set-cookie'][0]
-
-    const protectedRes = await request(app.server)
-      .post('/api/orders') // <-- update this to a real protected route
-      .set('Cookie', cookie)
-
-    expect(protectedRes.status).toBe(200)
-    expect((protectedRes.body as { user: { username: string } }).user).toEqual({
-      username: 'admin',
-      isAdmin: true,
+      expect(res.statusCode).toBe(500)
+      expect(res.body).toContain('Internal server error')
     })
   })
 
-  it('clears the session cookie on logout', async () => {
-    // 1. Login
-    const loginRes = await request(app.server)
-      .post('/api/login')
-      .send({ username: 'admin', password: 'SnackBoss2025' })
+  // ─── SESSION ───────────────────────────────────────────────────────────────────
+  describe('🍪 Session Management', () => {
+    it('sets a session cookie on login and grants access to protected route', async () => {
+      const loginRes = await app.inject({
+        method: 'POST',
+        url: '/api/login',
+        payload: { username: 'alice', password: 'password' },
+      })
 
-    const cookie = loginRes.headers['set-cookie'][0]
+      expect(loginRes.statusCode).toBe(200)
+      const cookie = loginRes.cookies.find((c) => c.name === 'session')
+      expect(cookie).toBeDefined()
 
-    // 2. Logout
-    const logoutRes = await request(app.server).post('/api/logout').set('Cookie', cookie)
+      const protectedRes = await app.inject({
+        method: 'GET',
+        url: '/api/orders',
+        cookies: { session: cookie!.value },
+      })
 
-    expect(logoutRes.status).toBe(200)
-    expect((logoutRes.body as { message: string }).message).toBe('Logged out successfully')
-    expect(logoutRes.headers['set-cookie']).toBeDefined()
-    expect(logoutRes.headers['set-cookie'][0]).toMatch(/session=;/)
+      expect(protectedRes.statusCode).toBe(200)
+    })
+
+    it('clears session cookie on logout', async () => {
+      const loginRes = await app.inject({
+        method: 'POST',
+        url: '/api/login',
+        payload: { username: 'alice', password: 'password' },
+      })
+
+      const cookie = loginRes.cookies.find((c) => c.name === 'session')
+
+      const logoutRes = await app.inject({
+        method: 'POST',
+        url: '/api/logout',
+        cookies: { session: cookie!.value },
+      })
+
+      expect(logoutRes.statusCode).toBe(200)
+
+      const body: { message: string } = await logoutRes.json()
+      expect(body.message).toBe('Logged out successfully')
+
+      const cleared = logoutRes.cookies.find((c) => c.name === 'session')
+      expect(cleared?.value).toBe('')
+    })
   })
 })

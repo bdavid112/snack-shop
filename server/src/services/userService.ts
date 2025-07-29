@@ -36,7 +36,8 @@ export async function loginUser(app: FastifyInstance, username: string, password
 
   /* Try authenticating */
   const authenticated = await bcrypt.compare(password, user.password)
+  const userId = user.id
   const isAdmin = user.is_admin
 
-  return { authenticated, isAdmin }
+  return { id: userId, authenticated, isAdmin }
 }

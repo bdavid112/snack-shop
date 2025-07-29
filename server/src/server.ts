@@ -2,16 +2,14 @@ import Fastify from 'fastify'
 import cookie from 'fastify-cookie'
 import * as signature from 'cookie-signature'
 import cors from '@fastify/cors'
-import prismaPlugin from './plugins/prisma'
-import authRoutes from './routes/auth'
-import productRoutes from './routes/product'
-import orderRoutes from './routes/orders'
+import { authRoutes, productRoutes, orderRoutes } from './routes'
+import { prisma } from './plugins'
 
 export async function buildServer() {
   const app = Fastify({
     logger:
       process.env.NODE_ENV === 'test'
-        ? { level: 'error' } // or false to silence completely
+        ? { level: 'silent' } // or false to silence completely
         : { level: 'info' },
   })
 
@@ -43,7 +41,7 @@ export async function buildServer() {
     },
   })
 
-  app.register(prismaPlugin)
+  app.register(prisma)
 
   /* Register routes */
   app.register(authRoutes, { prefix: '/api' })

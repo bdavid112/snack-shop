@@ -1,16 +1,22 @@
-import { beforeEach, afterEach } from 'vitest'
-import { getTestPrisma } from './test/utils/getPrisma'
+import { beforeEach, beforeAll, afterAll } from 'vitest'
+import { getTestApp } from './test/utils/getApp'
 
 import seed from './prisma/seed'
 
-let prisma: Awaited<ReturnType<typeof getTestPrisma>>
+let app: Awaited<ReturnType<typeof getTestApp>>
 
-beforeEach(async () => {
-  prisma = await getTestPrisma()
-  await prisma.$executeRawUnsafe('BEGIN')
-  await seed(prisma)
+beforeAll(async () => {
+  app = await getTestApp()
 })
 
-afterEach(async () => {
-  await prisma.$executeRawUnsafe('ROLLBACK')
+afterAll(async () => {
+  await app.prisma.$disconnect()
+  await app.close()
+})
+
+beforeEach(async () => {
+  const prisma = app.prisma
+  if (prisma) {
+    await seed(prisma)
+  }
 })

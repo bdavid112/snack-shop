@@ -1,7 +1,7 @@
 import { FastifyRequest, FastifyReply } from 'fastify'
 
 type SessionPayload = {
-  username: string
+  id: number
   isAdmin: boolean
 }
 

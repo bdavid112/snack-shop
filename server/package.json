@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "dev": "ts-node-dev --respawn src/start.ts",
-    "test": "prisma db push && NODE_ENV=test npx vitest run"
+    "test": "vitest run"
   },
   "keywords": [],
   "author": "",

@@ -1,11 +1,13 @@
 import { FastifyInstance } from 'fastify'
-import { loginUser, registerUser } from '../services/userService'
-import { authMiddleware } from '../plugins/authMiddleware'
+import { loginUser, registerUser } from '../services'
+import { authMiddleware } from '../plugins'
+import { handleError } from '../utils'
 
 /* eslint-disable @typescript-eslint/require-await */
-export default async function authRoutes(app: FastifyInstance) {
+export async function authRoutes(app: FastifyInstance) {
   /* Register a new user */
   app.post('/register', async (req, reply) => {
+    // Input data
     const { username, password } = req.body as {
       username: string
       password: string
@@ -17,22 +19,15 @@ export default async function authRoutes(app: FastifyInstance) {
       /* Respond with success */
       return reply.status(201).send({ message: 'User created', userId: newUser.id })
     } catch (err) {
-      req.log.error(err)
-
-      if (err instanceof Error) {
-        if (err.message === 'Username already taken') {
-          return reply.status(409).send({ message: err.message })
-        }
-
-        return reply.status(500).send({ message: 'Internal server error' })
-      }
-
-      return reply.status(500).send({ message: 'Unexpected error' })
+      handleError(err, req, reply, {
+        'Username already taken': { statusCode: 409 },
+      })
     }
   })
 
   /* Login */
   app.post('/login', async (req, reply) => {
+    // Input credentials
     const { username, password } = req.body as {
       username: string
       password: string
@@ -44,7 +39,7 @@ export default async function authRoutes(app: FastifyInstance) {
       if (!result.authenticated) return reply.status(401).send({ message: 'Not authenticated' })
 
       /* Set a signed cookie */
-      reply.setCookie('session', JSON.stringify({ username, isAdmin: result.isAdmin }), {
+      reply.setCookie('session', JSON.stringify({ id: result.id, isAdmin: result.isAdmin }), {
         path: '/',
         httpOnly: true,
         sameSite: 'lax',
@@ -54,17 +49,9 @@ export default async function authRoutes(app: FastifyInstance) {
 
       return reply.send(result)
     } catch (err) {
-      req.log.error(err)
-
-      if (err instanceof Error) {
-        if (err.message === 'No user with this username') {
-          return reply.status(401).send({ message: 'Not authenticated' })
-        }
-
-        return reply.status(500).send({ message: 'Internal server error' })
-      }
-
-      return reply.status(500).send({ message: 'Unexpected error' })
+      handleError(err, req, reply, {
+        'No user with this username': { statusCode: 401 },
+      })
     }
   })
 
