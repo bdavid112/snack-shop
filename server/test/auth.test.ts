@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeAll, vi } from 'vitest'
 import * as userService from '../src/services/userService'
-import { getTestApp } from './utils'
+import { getSignedSessionCookie, getTestApp } from './utils'
 
 let app: Awaited<ReturnType<typeof getTestApp>>
 
@@ -143,6 +143,20 @@ describe('🔐 Authentication API', () => {
 
       const cleared = logoutRes.cookies.find((c) => c.name === 'session')
       expect(cleared?.value).toBe('')
+    })
+
+    it('returns the current user on /me endpoint', async () => {
+      const cookie = getSignedSessionCookie({ id: 1, username: 'alice', isAdmin: false })
+
+      const res = await app.inject({
+        method: 'GET',
+        url: '/api/me',
+        headers: { cookie },
+      })
+
+      expect(res.statusCode).toBe(200)
+      const user = await res.json()
+      expect(user).toEqual({ id: 1, username: 'alice', isAdmin: false })
     })
   })
 })

@@ -64,5 +64,25 @@ export async function authRoutes(app: FastifyInstance) {
 
     return reply.send({ message: `Logged out successfully` })
   })
+
+  /* Check if user is logged in and send their data if yes */
+  app.get('/me', async (req, reply) => {
+    try {
+      await authMiddleware(req, reply)
+
+      const raw = req.cookies.session
+      if (!raw) return reply.status(401).send({ message: 'Not authenticated' })
+
+      // Remove the "s:" prefix and signature
+      const signed = raw.slice(2) // remove "s:"
+      const jsonStr = signed.split('.')[0] // before the first '.'
+
+      const user = JSON.parse(jsonStr)
+      return reply.send(user)
+    } catch (err) {
+      req.log.error(err)
+      return reply.status(500).send({ message: 'Internal Server Error' })
+    }
+  })
 }
 /* eslint-enable @typescript-eslint/require-await */
