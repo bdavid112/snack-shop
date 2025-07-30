@@ -1,9 +1,14 @@
 import { FastifyInstance } from 'fastify'
-import { createProduct, deleteProduct, getAllProducts, updateProduct } from '../services'
-import { ProductInput, ProductSchema } from '../types'
-import { requireAdmin } from '../plugins'
-import { handleError } from '../utils'
-import { validateRequest } from '../utils'
+import {
+  createProduct,
+  deleteProduct,
+  getAllProducts,
+  updateProduct,
+} from '@services/productService'
+import { ProductInput, ProductSchema } from '@shared/schemas/product'
+import { requireAdmin } from '@plugins/authMiddleware'
+import { handleError } from '@utils/handleError'
+import { validateRequest } from '@utils/validate'
 
 /* eslint-disable @typescript-eslint/require-await */
 export async function productRoutes(app: FastifyInstance) {

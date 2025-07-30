@@ -1,5 +1,5 @@
 import { FastifyInstance } from 'fastify'
-import { OrderInput } from '../types/order'
+import { OrderInput } from '@shared/schemas/order'
 
 /* Get orders of a user */
 export async function getUserOrders(app: FastifyInstance, userId: number) {

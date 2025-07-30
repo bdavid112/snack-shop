@@ -1,0 +1,120 @@
+@layer components {
+  /* === Base Structure === */
+  .zui-input {
+    @apply flex flex-col gap-1;
+
+    label {
+      @apply text-label leading-label font-medium mb-0;
+    }
+
+    input {
+      @apply rounded-sm;
+    }
+  }
+
+  .zui-input-field-wrapper {
+    @apply relative;
+
+    input {
+      @apply relative w-full outline-none transition-all duration-75 caret-[var(--zui-state-info)];
+      z-index: 100;
+    }
+
+    &::after {
+      content: '';
+      @apply absolute bottom-[-2px] left-0 right-0 h-[2px];
+      transform: scaleX(0);
+      transition:
+        transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+        box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 5;
+    }
+
+    &:focus-within::after {
+      transform: scaleX(1);
+    }
+  }
+
+  /* === State Borders === */
+  .zui-input--filled {
+    .zui-input-field-wrapper--default::after {
+      background-color: var(--zui-state-info);
+    }
+    .zui-input-field-wrapper--default:focus-within::after {
+      box-shadow: 0 0 4px 0 var(--zui-state-info);
+    }
+
+    .zui-input-field-wrapper--error::after {
+      transform: scaleX(1);
+      background-color: var(--zui-state-error);
+    }
+
+    .zui-input-field-wrapper--success::after {
+      transform: scaleX(1);
+      background-color: var(--zui-state-success);
+    }
+
+    .zui-input-field-wrapper--validating::after {
+      transform: scaleX(1);
+      background-color: var(--zui-state-info);
+    }
+  }
+
+  /* === Helper Text === */
+  .helper-text {
+    @apply text-caption leading-caption;
+  }
+  .helper-text--default {
+    @apply text-[var(--zui-text-muted)];
+  }
+  .helper-text--validating {
+    @apply text-[var(--zui-state-info)];
+  }
+  .helper-text--error {
+    @apply text-[var(--zui-state-error)];
+  }
+  .helper-text--success {
+    @apply text-[var(--zui-state-success)];
+  }
+
+  /* === Variants === */
+
+  /* Filled */
+  .zui-input--filled input {
+    @apply bg-[var(--zui-surface-100)] border border-transparent;
+
+    &:not([disabled]) {
+      @apply hover:bg-[var(--zui-surface-1000)] focus:bg-[var(--zui-surface-1000)] rounded-b-none;
+    }
+
+    &:where([disabled]) {
+      @apply bg-[var(--zui-surface-10)] hover:cursor-not-allowed;
+    }
+  }
+
+  /* Disabled state */
+  .zui-input:where([disabled]) {
+    @apply cursor-not-allowed text-[color:var(--zui-text-disabled)];
+  }
+
+  /* === Size === */
+  .zui-input--sm input {
+    @apply h-8 px-3 py-1;
+  }
+  .zui-input--md input {
+    @apply h-10 px-4 py-1;
+  }
+  .zui-input--lg input {
+    @apply h-12 px-5 py-1;
+  }
+
+  /* === Theme Tokens (optional for future use) === */
+  :root,
+  [data-theme='light'] {
+    /* Your light theme overrides here */
+  }
+
+  [data-theme='dark'] {
+    /* Your dark theme overrides here */
+  }
+}

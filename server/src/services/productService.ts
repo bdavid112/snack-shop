@@ -1,5 +1,5 @@
 import { FastifyInstance } from 'fastify'
-import { ProductInput } from '../types'
+import { ProductInput } from '@shared/schemas/product'
 
 /* Get product by its ID */
 export async function getProduct(app: FastifyInstance, productId: number) {

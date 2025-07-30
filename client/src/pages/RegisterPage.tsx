@@ -8,7 +8,7 @@ import { useAuth } from '@context/AuthContext'
 import { api } from '@api/api'
 import { UserResponse } from '@shared/schemas/user'
 
-export const LoginPage = () => {
+export const RegisterPage = () => {
   const { user, setUser } = useAuth()
 
   const [username, setUsername] = useState('')
@@ -37,19 +37,19 @@ export const LoginPage = () => {
     return <Navigate to="/products" replace />
   }
 
-  const handleLogin = () => {
+  const handleRegister = () => {
     api
-      .post('/login', { username, password }, { withCredentials: true })
+      .post('/register', { username, password }, { withCredentials: true })
       .then((res) => {
         setUser(res.data as UserResponse)
       })
       .catch((err) => {
-        console.log(err)
+        console.error(err)
         if (err && typeof err === 'object' && 'response' in err) {
           const apiErr = err as { response?: { data?: { message?: string } } }
-          setError(apiErr.response?.data?.message ?? 'Login failed')
+          setError(apiErr.response?.data?.message ?? 'Registration failed')
         } else {
-          setError('Login failed')
+          setError('Registration failed')
         }
       })
   }
@@ -74,7 +74,7 @@ export const LoginPage = () => {
         Snack Shop
       </motion.h1>
 
-      {/* Login Card */}
+      {/* Register Card */}
       <AnimatePresence>
         {showForm && (
           <motion.div
@@ -87,7 +87,7 @@ export const LoginPage = () => {
             <form
               onSubmit={(e) => {
                 e.preventDefault()
-                handleLogin()
+                handleRegister()
               }}
               className="w-full"
               autoComplete="on"
@@ -95,7 +95,7 @@ export const LoginPage = () => {
             >
               <Card variant="elevated" className="w-full">
                 <CardHeader className="text-center">
-                  <p className="font-bold text-h4 leading-h4 text-primary">Login</p>
+                  <p className="font-bold text-h4 leading-h4 text-primary">Register</p>
                 </CardHeader>
 
                 <CardBody>
@@ -128,12 +128,12 @@ export const LoginPage = () => {
 
                 <CardFooter className="text-center">
                   <Button size="sm" className="w-full" shape="pill" type="submit">
-                    Login
+                    Register
                   </Button>
                   <span className="block mt-6 text-sm leading-sm">
-                    Don’t have an account?{' '}
-                    <Link to="/register" className="font-medium text-primary hover:underline">
-                      Register
+                    Already a member?{' '}
+                    <Link to="/login" className="font-medium text-primary hover:underline">
+                      Login
                     </Link>
                   </span>
                 </CardFooter>
@@ -146,4 +146,4 @@ export const LoginPage = () => {
   )
 }
 
-export default LoginPage
+export default RegisterPage

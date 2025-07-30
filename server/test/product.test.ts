@@ -1,7 +1,7 @@
 import { beforeAll, describe, it, expect } from 'vitest'
 import { sign } from 'cookie-signature'
 import { getSignedSessionCookie } from './utils'
-import { ProductResponse, ProductResponseSchema } from '../src/types/product'
+import { ProductResponse, ProductResponseSchema } from '@shared/schemas/product'
 import z from 'zod'
 import { getTestApp } from './utils/getApp'
 

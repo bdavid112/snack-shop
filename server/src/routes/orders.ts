@@ -1,9 +1,9 @@
 import { FastifyInstance } from 'fastify'
-import { authMiddleware } from '../plugins'
-import { createOrder, getAllOrders, getUserOrders } from '../services'
-import { OrderInput, OrderSchema } from '../types'
-import { validateRequest } from '../utils'
-import { handleError } from '../utils'
+import { OrderInput, OrderSchema } from '@shared/schemas/order'
+import { handleError } from '@utils/handleError'
+import { validateRequest } from '@utils/validate'
+import { createOrder, getAllOrders, getUserOrders } from '@services/orderService'
+import { authMiddleware } from '@plugins/authMiddleware'
 
 /* eslint-disable @typescript-eslint/require-await */
 export async function orderRoutes(app: FastifyInstance) {

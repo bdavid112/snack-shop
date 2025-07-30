@@ -6,11 +6,12 @@ export function ProtectedRoute({ children }: { children: JSX.Element }) {
   const { user, loading } = useAuth()
 
   if (loading) {
-    // You can customize this with a spinner or skeleton if desired
     return <div>Loading...</div>
   }
 
-  if (!user?.authenticated) {
+  console.log('ProtectedRoute user:', user)
+
+  if (!user) {
     return <Navigate to="/login" replace />
   }
 

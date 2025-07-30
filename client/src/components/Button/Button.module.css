@@ -1,0 +1,118 @@
+@layer components {
+  /* === Variants === */
+
+  /* Base styling */
+
+  .zui-button {
+    @apply inline-flex items-center justify-center gap-1 bg-inherit text-[color:var(--zui-text-primary)] text-sm leading-sm tracking-wider font-medium cursor-pointer transition-all duration-75 outline-none;
+  }
+  .zui-button:focus-visible {
+    @apply ring-2 ring-[var(--zui-primary-base-sm)] ring-offset-2;
+  }
+
+  .zui-button--primary {
+    @apply bg-[var(--zui-primary-base-lg)];
+  }
+
+  .zui-button--secondary {
+    @apply border border-[var(--zui-border-muted)];
+  }
+
+  .zui-button--icon-only {
+    @apply !p-2 aspect-square;
+  }
+
+  /* Styles for states */
+
+  .zui-button:where([disabled]) {
+    @apply cursor-not-allowed text-[color:var(--zui-text-disabled)];
+  }
+
+  .zui-button--primary:not([disabled]) {
+    @apply hover:bg-[var(--zui-primary-hover-lg)] active:bg-[var(--zui-primary-active)] shadow-sm hover:shadow-md active:shadow-none active:inset-shadow-sm;
+  }
+  .zui-button--primary:where([disabled]) {
+    @apply bg-[var(--zui-primary-disabled-lg)];
+  }
+
+  .zui-button--secondary:not([disabled]) {
+    @apply hover:bg-[var(--zui-surface-10)] active:bg-[var(--zui-surface-100)];
+  }
+  .zui-button--secondary:where([disabled]) {
+    @apply border-[var(--zui-border-disabled)];
+  }
+
+  .zui-button--ghost:not([disabled]) {
+    @apply hover:bg-[var(--zui-surface-10)] active:bg-[var(--zui-surface-100)];
+  }
+
+  /* === Size === */
+
+  .zui-button--sm {
+    @apply h-8 px-3 py-1;
+
+    & .zui-button__icon {
+      svg {
+        @apply w-3.5 h-3.5;
+      }
+    }
+  }
+
+  .zui-button--md {
+    @apply h-10 px-4 py-1;
+
+    & .zui-button__icon {
+      svg {
+        @apply w-5 h-5;
+      }
+    }
+  }
+
+  .zui-button--lg {
+    @apply h-12 px-5 py-1;
+
+    & .zui-button__icon {
+      svg {
+        @apply w-6.5 h-6.5;
+      }
+    }
+  }
+
+  /* === Shape === */
+
+  .zui-button--rectangle {
+    @apply rounded-sm;
+  }
+
+  .zui-button--pill {
+    @apply rounded-full;
+  }
+}
+
+/* === Theme related styling === */
+
+:root, /* Fallback */
+[data-theme='light'] {
+  .zui-button--primary {
+    @apply text-[color:var(--zui-text-inverted)];
+  }
+  .zui-button--primary:where([disabled]) {
+    @apply text-[color:var(--zui-text-disabled)];
+  }
+}
+
+[data-theme='dark'] {
+  .zui-button--primary {
+    @apply text-[color:var(--zui-text-primary)];
+  }
+  .zui-button--primary:where([disabled]) {
+    @apply text-[color:var(--zui-text-muted)];
+  }
+
+  .zui-button--secondary {
+    @apply border-none bg-[var(--zui-surface-10)];
+  }
+  .zui-button--secondary:not([disabled]) {
+    @apply hover:bg-[var(--zui-surface-100)] active:bg-[var(--zui-surface-1000)];
+  }
+}

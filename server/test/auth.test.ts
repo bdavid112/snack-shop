@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeAll, vi } from 'vitest'
 import * as userService from '../src/services/userService'
 import { getSignedSessionCookie, getTestApp } from './utils'
+import { UserResponse } from '@shared/schemas/user'
 
 let app: Awaited<ReturnType<typeof getTestApp>>
 
@@ -46,6 +47,39 @@ describe('🔐 Authentication API', () => {
 
       expect(res.statusCode).toBe(500)
       expect(res.body).toContain('Internal server error')
+    })
+
+    it('returns 400 if username is missing', async () => {
+      const res = await app.inject({
+        method: 'POST',
+        url: '/api/register',
+        payload: { password: '123456' },
+      })
+
+      expect(res.statusCode).toBe(400)
+      expect(res.body).toContain('Invalid input data')
+    })
+
+    it('returns 400 if password is missing', async () => {
+      const res = await app.inject({
+        method: 'POST',
+        url: '/api/register',
+        payload: { username: 'newuser' },
+      })
+
+      expect(res.statusCode).toBe(400)
+      expect(res.body).toContain('Invalid input data')
+    })
+
+    it('returns 400 if username or password is empty', async () => {
+      const res = await app.inject({
+        method: 'POST',
+        url: '/api/register',
+        payload: { username: '', password: '' },
+      })
+
+      expect(res.statusCode).toBe(400)
+      expect(res.body).toContain('Invalid input data')
     })
   })
 
@@ -96,6 +130,26 @@ describe('🔐 Authentication API', () => {
 
       expect(res.statusCode).toBe(500)
       expect(res.body).toContain('Internal server error')
+    })
+
+    it('returns 400 if username or password is missing or empty', async () => {
+      const res1 = await app.inject({
+        method: 'POST',
+        url: '/api/login',
+        payload: { username: '', password: 'password' },
+      })
+
+      expect(res1.statusCode).toBe(400)
+      expect(res1.body).toContain('Invalid input data')
+
+      const res2 = await app.inject({
+        method: 'POST',
+        url: '/api/login',
+        payload: { username: 'alice' },
+      })
+
+      expect(res2.statusCode).toBe(400)
+      expect(res2.body).toContain('Invalid input data')
     })
   })
 
@@ -155,7 +209,10 @@ describe('🔐 Authentication API', () => {
       })
 
       expect(res.statusCode).toBe(200)
-      const user = await res.json()
+
+      const json = <T>(res: Response): T => res as unknown as T
+      const user = json<UserResponse>(await res.json())
+
       expect(user).toEqual({ id: 1, username: 'alice', isAdmin: false })
     })
   })

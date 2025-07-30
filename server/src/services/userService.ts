@@ -1,7 +1,10 @@
 import bcrypt from 'bcrypt'
 import type { FastifyInstance } from 'fastify'
+import { UserInput } from '@shared/schemas/user'
 
-export async function registerUser(app: FastifyInstance, username: string, password: string) {
+export async function registerUser(app: FastifyInstance, input: UserInput) {
+  const { username, password } = input
+
   /* Check if user already exists */
   const existingUser = await app.prisma.user.findUnique({
     where: { username },
@@ -25,7 +28,9 @@ export async function registerUser(app: FastifyInstance, username: string, passw
   return newUser
 }
 
-export async function loginUser(app: FastifyInstance, username: string, password: string) {
+export async function loginUser(app: FastifyInstance, input: UserInput) {
+  const { username, password } = input
+
   /* Search user */
   const user = await app.prisma.user.findUnique({
     where: { username },

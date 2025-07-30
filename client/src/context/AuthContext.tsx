@@ -1,24 +1,26 @@
 import axios from 'axios'
 import { createContext, ReactNode, useContext, useEffect, useState } from 'react'
+import { UserResponse } from '@shared/schemas/user'
 
 type AuthContextType = {
-  user: User | null
-  setUser: React.Dispatch<React.SetStateAction<User | null>>
+  user: UserResponse | null
+  setUser: React.Dispatch<React.SetStateAction<UserResponse | null>>
   loading: boolean
 }
 
 const AuthContext = createContext<AuthContextType | null>(null)
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<User | null>(null)
+  const [user, setUser] = useState<UserResponse | null>(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     axios
-      .get<User>('/api/me', { withCredentials: true })
+      .get<UserResponse>('/api/me', { withCredentials: true })
       .then((res) => setUser(res.data))
+      .then(console.log)
       .catch(() => setUser(null))
-      .finally(() => setLoading(false)) // This is the key
+      .finally(() => setLoading(false))
   }, [])
 
   return <AuthContext.Provider value={{ user, setUser, loading }}>{children}</AuthContext.Provider>

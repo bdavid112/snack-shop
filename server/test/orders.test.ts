@@ -1,7 +1,7 @@
 import { beforeAll, describe, it, expect } from 'vitest'
 import { z } from 'zod'
 import { getSignedSessionCookie } from './utils'
-import { OrderResponseSchema } from '../src/types/order'
+import { OrderResponseSchema } from '@shared/schemas/order'
 import { getTestApp } from './utils/getApp'
 
 let app: Awaited<ReturnType<typeof getTestApp>>

@@ -1,5 +1,6 @@
 import { defineConfig } from 'vitest/config'
 import dotenv from 'dotenv'
+import tsconfigPaths from 'vite-tsconfig-paths'
 
 // Load .env.test before tests run
 dotenv.config({ path: '.env.test' })
@@ -12,4 +13,5 @@ export default defineConfig({
     setupFiles: ['./vitest.setup.ts'],
     fileParallelism: false, // Disable file parallelism to avoid issues with shared resources
   },
+  plugins: [tsconfigPaths()],
 })

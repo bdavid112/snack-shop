@@ -1,0 +1,157 @@
+@tailwind utilities;
+
+@import 'tailwindcss';
+@import '../styles/theme.css';
+@import '../components/Button/Button.module.css';
+@import '../components/Card/Card.module.css';
+@import '../components/Input/Input.module.css';
+
+@layer components {
+  body {
+    @apply bg-[var(--zui-background)];
+  }
+
+  .displayLg,
+  .displayMd,
+  .displaySm,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p,
+  small,
+  label,
+  button,
+  .text-caption {
+    @apply text-[color:var(--zui-text-primary)];
+  }
+
+  .displayLg {
+    @apply text-displayLg leading-displayLg tracking-tighter font-light mb-10;
+  }
+
+  .displayMd {
+    @apply text-displayMd leading-displayMd tracking-tighter font-light mb-8;
+  }
+
+  .displaySm {
+    @apply text-displaySm leading-displaySm tracking-tighter font-normal mb-7;
+  }
+
+  h1 {
+    @apply text-h1 leading-h1 tracking-tight font-extrabold mb-6;
+  }
+
+  h2 {
+    @apply text-h2 leading-h2 tracking-tight font-extrabold mb-5;
+  }
+
+  h3 {
+    @apply text-h3 leading-h3 tracking-tight font-extrabold mb-4;
+  }
+
+  h4 {
+    @apply text-h4 leading-h4 font-bold mb-3;
+  }
+
+  h5 {
+    @apply text-h5 leading-h5 font-bold mb-2.5;
+  }
+
+  h6 {
+    @apply text-h6 leading-h6 font-bold mb-2;
+  }
+
+  p {
+    @apply text-base leading-base tracking-wider font-normal mb-4;
+  }
+
+  small {
+    @apply text-sm leading-sm tracking-wider font-normal;
+  }
+
+  label {
+    @apply text-label leading-label tracking-wider font-medium mb-4;
+  }
+
+  .text-caption {
+    @apply text-caption leading-caption tracking-wider mb-2;
+  }
+}
+
+@layer utilities {
+  .zui-gradient-background {
+    background: var(--zui-animated-gradient);
+    background-size: 115% 115%;
+  }
+
+  .zui-clip-text {
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+  }
+
+  /* === Animations === */
+
+  /* Fade in */
+  @keyframes zui-fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .zui-animate-fade-in {
+    animation: var(--zui-fade-in);
+  }
+
+  /* Animated gradient */
+  @keyframes zui-gradient-shift {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+
+  .zui-animate-gradient {
+    animation: zui-gradient-shift 8s ease-in-out infinite;
+  }
+
+  /* Combo class to fix animation override issue */
+  .zui-animate-gradient-fade {
+    animation:
+      zui-fade-in 0.6s ease-out both,
+      zui-gradient-shift 8s ease-in-out infinite;
+  }
+
+  /* Animation delays */
+  .zui-delay-100 {
+    animation-delay: 0.1s;
+  }
+  .zui-delay-200 {
+    animation-delay: 0.2s;
+  }
+  .zui-delay-300 {
+    animation-delay: 0.3s;
+  }
+  .zui-delay-400 {
+    animation-delay: 0.4s;
+  }
+  .zui-delay-500 {
+    animation-delay: 0.5s;
+  }
+  .zui-delay-600 {
+    animation-delay: 0.6s;
+  }
+}

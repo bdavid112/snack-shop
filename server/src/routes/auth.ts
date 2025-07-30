@@ -1,20 +1,20 @@
 import { FastifyInstance } from 'fastify'
-import { loginUser, registerUser } from '../services'
-import { authMiddleware } from '../plugins'
-import { handleError } from '../utils'
+import { loginUser, registerUser } from '@services/userService'
+import { authMiddleware } from '@plugins/authMiddleware'
+import { handleError } from '@utils/handleError'
+import { validateRequest } from '@utils/validate'
+import { UserInput, UserSchema } from '@shared/schemas/user'
 
 /* eslint-disable @typescript-eslint/require-await */
 export async function authRoutes(app: FastifyInstance) {
   /* Register a new user */
   app.post('/register', async (req, reply) => {
-    // Input data
-    const { username, password } = req.body as {
-      username: string
-      password: string
-    }
+    // Validate req body
+    const validated = await validateRequest<UserInput>(req, reply, UserSchema)
+    if (!validated) return
 
     try {
-      const newUser = await registerUser(app, username, password)
+      const newUser = await registerUser(app, validated)
 
       /* Respond with success */
       return reply.status(201).send({ message: 'User created', userId: newUser.id })
@@ -27,14 +27,12 @@ export async function authRoutes(app: FastifyInstance) {
 
   /* Login */
   app.post('/login', async (req, reply) => {
-    // Input credentials
-    const { username, password } = req.body as {
-      username: string
-      password: string
-    }
+    // Validate req body
+    const validated = await validateRequest<UserInput>(req, reply, UserSchema)
+    if (!validated) return
 
     try {
-      const result = await loginUser(app, username, password)
+      const result = await loginUser(app, validated)
 
       if (!result.authenticated) return reply.status(401).send({ message: 'Not authenticated' })
 
@@ -70,14 +68,11 @@ export async function authRoutes(app: FastifyInstance) {
     try {
       await authMiddleware(req, reply)
 
-      const raw = req.cookies.session
-      if (!raw) return reply.status(401).send({ message: 'Not authenticated' })
+      const user = req.cookies.session
+      if (!user) {
+        return reply.status(401).send({ message: 'Not authenticated' })
+      }
 
-      // Remove the "s:" prefix and signature
-      const signed = raw.slice(2) // remove "s:"
-      const jsonStr = signed.split('.')[0] // before the first '.'
-
-      const user = JSON.parse(jsonStr)
       return reply.send(user)
     } catch (err) {
       req.log.error(err)

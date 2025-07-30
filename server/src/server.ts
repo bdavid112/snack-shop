@@ -2,8 +2,10 @@ import Fastify from 'fastify'
 import cookie from 'fastify-cookie'
 import * as signature from 'cookie-signature'
 import cors from '@fastify/cors'
-import { authRoutes, productRoutes, orderRoutes } from './routes'
+import { authRoutes } from '@routes/auth'
 import { prisma } from './plugins'
+import { orderRoutes } from '@routes/orders'
+import { productRoutes } from '@routes/products'
 
 export async function buildServer() {
   const app = Fastify({
