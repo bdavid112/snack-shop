@@ -1,0 +1,14 @@
+# Ignore all local deps
+node_modules
+**/node_modules
+
+# Ignore env and build files
+.env
+dist
+build
+npm-debug.log
+
+# Ignore test coverage or editor configs
+coverage
+.vscode
+.idea
