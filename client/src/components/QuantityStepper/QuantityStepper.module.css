@@ -1,0 +1,18 @@
+@layer components {
+  /* === Variants === */
+
+  /* Base styling */
+
+  .zui-quantity-stepper {
+    @apply bg-[var(--zui-surface-100)] h-fit rounded-full;
+  }
+
+  /* === Theme related styling === */
+
+  :root, /* Fallback */
+  [data-theme='light'] {
+  }
+
+  [data-theme='dark'] {
+  }
+}

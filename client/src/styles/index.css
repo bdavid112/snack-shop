@@ -5,6 +5,8 @@
 @import '../components/Button/Button.module.css';
 @import '../components/Card/Card.module.css';
 @import '../components/Input/Input.module.css';
+@import '../components/NavLink/NavLink.module.css';
+@import '../components/QuantityStepper/QuantityStepper.module.css';
 
 @layer components {
   body {

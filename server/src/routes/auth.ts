@@ -68,12 +68,12 @@ export async function authRoutes(app: FastifyInstance) {
     try {
       await authMiddleware(req, reply)
 
-      const user = req.cookies.session
-      if (!user) {
+      const user = req.unsignCookie(req.cookies.session)
+      if (!user.valid) {
         return reply.status(401).send({ message: 'Not authenticated' })
       }
 
-      return reply.send(user)
+      return reply.send(user.value)
     } catch (err) {
       req.log.error(err)
       return reply.status(500).send({ message: 'Internal Server Error' })

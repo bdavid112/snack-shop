@@ -1,0 +1,29 @@
+@layer components {
+  /* === Variants === */
+
+  /* Base styling */
+  .zui-navlink__wrapper {
+    @apply relative h-fit;
+  }
+  .zui-navlink {
+    @apply inline-flex  rounded-sm items-center gap-2 p-1 text-sm outline-none transition-all duration-75 cursor-pointer text-[color:var(--zui-text-muted)] hover:text-[color:var(--zui-text-secondary)];
+  }
+  .zui-navlink:focus-visible {
+    @apply ring-2 ring-[var(--zui-primary-base-sm)] ring-offset-2;
+  }
+
+  .zui-navlink__expand_icon {
+    @apply transition-all duration-75;
+  }
+  .zui-navlink__expanded_menu {
+    @apply absolute flex flex-col gap-1 top-full py-2 px-4 right-0 bg-[var(--zui-surface-10)] pointer-events-none min-w-full w-fit h-fit rounded-sm transition-all ease-out duration-200 opacity-0;
+  }
+  .zui-navlink--expandable_hovered {
+    @apply opacity-100 pointer-events-auto;
+  }
+
+  /* Styles for states */
+  .zui-navlink--active {
+    @apply text-[color:var(--zui-text-primary)];
+  }
+}

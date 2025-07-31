@@ -1,32 +1,39 @@
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { Navigate, Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Button } from '@components/Button/Button'
 import { Card, CardBody, CardFooter, CardHeader } from '@components/Card'
 import { Input } from '@components/Input'
 import { useAuth } from '@context/AuthContext'
-import { api } from '@api/api'
-import { UserResponse } from '@shared/schemas/user'
+import { useAuthForm } from '@hooks/useAuthForm'
 
 export const RegisterPage = () => {
-  const { user, setUser } = useAuth()
+  const { user } = useAuth()
 
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
-  const [error, setError] = useState('')
+  const {
+    username,
+    setUsername,
+    password,
+    setPassword,
+    fieldErrors,
+    formError,
+    validating,
+    handleSubmit,
+  } = useAuthForm({ endpoint: '/register' })
+
   const [scaleUpTitle, setScaleUpTitle] = useState(false)
   const [slideUpTitle, setSlideUpTitle] = useState(false)
   const [showForm, setShowForm] = useState(false)
 
   useEffect(() => {
     const runAnimation = async () => {
-      await new Promise((r) => setTimeout(r, 100)) // slight delay
+      await new Promise((r) => setTimeout(r, 100))
       setScaleUpTitle(true)
 
-      await new Promise((r) => setTimeout(r, 600)) // wait for scale animation
+      await new Promise((r) => setTimeout(r, 600))
       setSlideUpTitle(true)
 
-      await new Promise((r) => setTimeout(r, 400)) // wait before showing form
+      await new Promise((r) => setTimeout(r, 400))
       setShowForm(true)
     }
 
@@ -37,26 +44,8 @@ export const RegisterPage = () => {
     return <Navigate to="/products" replace />
   }
 
-  const handleRegister = () => {
-    api
-      .post('/register', { username, password }, { withCredentials: true })
-      .then((res) => {
-        setUser(res.data as UserResponse)
-      })
-      .catch((err) => {
-        console.error(err)
-        if (err && typeof err === 'object' && 'response' in err) {
-          const apiErr = err as { response?: { data?: { message?: string } } }
-          setError(apiErr.response?.data?.message ?? 'Registration failed')
-        } else {
-          setError('Registration failed')
-        }
-      })
-  }
-
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-[#06B6D4] to-[#6366F1] flex items-center justify-center px-4 overflow-hidden">
-      {/* Title */}
       <motion.h1
         initial={{ opacity: 0, scale: 0.2 }}
         animate={{
@@ -74,7 +63,6 @@ export const RegisterPage = () => {
         Snack Shop
       </motion.h1>
 
-      {/* Register Card */}
       <AnimatePresence>
         {showForm && (
           <motion.div
@@ -87,7 +75,7 @@ export const RegisterPage = () => {
             <form
               onSubmit={(e) => {
                 e.preventDefault()
-                handleRegister()
+                handleSubmit()
               }}
               className="w-full"
               autoComplete="on"
@@ -106,8 +94,8 @@ export const RegisterPage = () => {
                       size="sm"
                       value={username}
                       onChange={(e) => setUsername(e.target.value)}
-                      helperText={error}
-                      state={error ? 'error' : 'default'}
+                      helperText={fieldErrors.username}
+                      state={formError || fieldErrors.username ? 'error' : 'default'}
                       autoComplete="username"
                       required
                     />
@@ -118,17 +106,34 @@ export const RegisterPage = () => {
                       size="sm"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
-                      helperText={error}
-                      state={error ? 'error' : 'default'}
+                      helperText={fieldErrors.password}
+                      state={
+                        formError || fieldErrors.password
+                          ? 'error'
+                          : validating
+                            ? 'validating'
+                            : 'default'
+                      }
                       autoComplete="current-password"
                       required
                     />
+                    {formError && (
+                      <span className="mt-2 text-xs text-red-600 text-destructive">
+                        {formError}
+                      </span>
+                    )}
                   </div>
                 </CardBody>
 
                 <CardFooter className="text-center">
-                  <Button size="sm" className="w-full" shape="pill" type="submit">
-                    Register
+                  <Button
+                    disabled={validating}
+                    size="sm"
+                    className="w-full"
+                    shape="pill"
+                    type="submit"
+                  >
+                    {validating ? 'Creating user…' : 'Register'}
                   </Button>
                   <span className="block mt-6 text-sm leading-sm">
                     Already a member?{' '}
