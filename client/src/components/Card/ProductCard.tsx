@@ -8,7 +8,7 @@ import { getStockInfo } from '@utils/stock'
 
 // Main component
 export const ProductCard = ({ product, className, ...props }: ProductCardProps) => {
-  const { name, price, stock, description, image_url } = product
+  const { name, price, stock, description, discount, image_url } = product
 
   const [quantity, setQuantity] = useState(1)
 
@@ -38,7 +38,14 @@ export const ProductCard = ({ product, className, ...props }: ProductCardProps) 
           </span>
         </div>
         <div className="flex items-end justify-between">
-          <p className="mb-0 font-semibold">${price / 100}</p>
+          <div className="flex gap-2">
+            <p className="mb-0 font-semibold">${(price * quantity) / 100}</p>
+            {discount && (
+              <p className="mb-0 font text-[var(--zui-text-muted)] line-through">
+                ${(price * discount * quantity) / 10000}
+              </p>
+            )}
+          </div>
           <QuantityStepper value={quantity} max={stock} onChange={setQuantity} />
         </div>
       </CardBody>

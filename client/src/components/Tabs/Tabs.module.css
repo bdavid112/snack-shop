@@ -1,0 +1,32 @@
+@layer components {
+  /* === Variants === */
+
+  /* Base styling */
+  .zui-tabs {
+    @apply flex p-1 rounded-md h-fit;
+  }
+
+  .zui-tabs--outlined {
+    @apply border border-[color:var(--zui-border-muted)];
+  }
+
+  .zui-tabs--elevated {
+    @apply bg-[var(--zui-surface-10)] shadow-md;
+  }
+
+  .zui-tabs--ghost {
+    @apply p-0;
+  }
+}
+
+/* === Theme related styling === */
+
+:root, /* Fallback */
+[data-theme='light'] {
+}
+
+[data-theme='dark'] {
+  .zui-tabs--elevated {
+    @apply bg-[color:var(--zui-surface-10)];
+  }
+}

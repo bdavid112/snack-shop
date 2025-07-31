@@ -37,7 +37,7 @@ export const Layout = ({ children }: LayoutProps) => {
       </header>
 
       <main className="flex-1">
-        <div className="max-w-[1200px] mx-auto mt-16">{children}</div>
+        <div className="max-w-[1200px] mx-auto mt-16 px-4">{children}</div>
       </main>
 
       <footer className="p-4 text-[var(--zui-text-inverted)] text-sm text-center opacity-70">

@@ -1,0 +1,78 @@
+@layer components {
+  /* === Variants === */
+
+  /* Base styling */
+  .zui-tab {
+    @apply text-[color:var(--zui-text-secondary)] active:text-[color:var(--zui-text-primary)] cursor-pointer flex items-center py-1 text-sm leading-sm rounded-sm min-w-8 w-fit transition-all duration-75 outline-none tracking-wider;
+  }
+
+  .zui-tab--elevated {
+    @apply bg-[var(--zui-surface-10)];
+  }
+
+  /* Styles for states */
+
+  .zui-tab--active {
+    @apply !text-[color:var(--zui-text-primary)] !bg-[color:var(--zui-surface-1000)] font-semibold;
+  }
+  .zui-tab:where([disabled]) {
+    @apply cursor-not-allowed text-[color:var(--zui-text-disabled)];
+  }
+
+  .zui-tab--elevated:not([disabled]) {
+    @apply hover:bg-[color:var(--zui-surface-100)] active:bg-[color:var(--zui-surface-1000)];
+  }
+
+  .zui-tab--outlined:not([disabled]) {
+    @apply hover:bg-[color:var(--zui-surface-10)] active:bg-[color:var(--zui-surface-100)];
+  }
+
+  /* === Size === */
+
+  .zui-tab--sm {
+    @apply h-8 px-2;
+
+    /*   & .zui-button__icon {
+      svg {
+        @apply w-3.5 h-3.5;
+      }
+    } */
+  }
+
+  .zui-tab--md {
+    @apply h-10 px-3 py-1;
+
+    /* & .zui-button__icon {
+      svg {
+        @apply w-5 h-5;
+      }
+    } */
+  }
+
+  .zui-tab--lg {
+    @apply h-12 px-4 py-1;
+
+    /*  & .zui-button__icon {
+      svg {
+        @apply w-6.5 h-6.5;
+      }
+    } */
+  }
+}
+
+/* === Theme related styling === */
+
+:root, /* Fallback */
+[data-theme='light'] {
+}
+
+[data-theme='dark'] {
+  .zui-tabs--elevated .zui-tab,
+  .zui-sidebar--elevated .zui-tab {
+    @apply bg-[color:var(--zui-surface-10)];
+  }
+  .zui-tabs--elevated .zui-tab:not([disabled]),
+  .zui-sidebar--elevated .zui-tab:not([disabled]) {
+    @apply hover:bg-[color:var(--zui-surface-100)] active:bg-[color:var(--zui-surface-1000)];
+  }
+}
