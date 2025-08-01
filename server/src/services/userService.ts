@@ -2,6 +2,10 @@ import bcrypt from 'bcrypt'
 import type { FastifyInstance } from 'fastify'
 import { UserInput } from '@shared/schemas/user'
 
+export async function getUsers(app: FastifyInstance) {
+  return await app.prisma.user.findMany()
+}
+
 export async function registerUser(app: FastifyInstance, input: UserInput) {
   const { username, password } = input
 

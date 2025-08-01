@@ -9,5 +9,6 @@ declare module 'fastify' {
       id: number
       isAdmin: boolean
     }
+    parts: () => AsyncIterableIterator<MultipartFile>
   }
 }

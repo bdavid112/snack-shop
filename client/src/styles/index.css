@@ -9,6 +9,8 @@
 @import '../components/QuantityStepper/QuantityStepper.module.css';
 @import '../components/Tab/Tab.module.css';
 @import '../components/Tabs/Tabs.module.css';
+@import '../components/Table/Table.module.css';
+@import '../components/CheckBox/CheckBox.module.css';
 
 @layer components {
   body {

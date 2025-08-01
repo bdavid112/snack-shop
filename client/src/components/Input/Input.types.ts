@@ -2,7 +2,7 @@ import { InputHTMLAttributes } from 'react'
 
 export type InputVariant = 'filled'
 export type InputSize = 'sm' | 'md' | 'lg'
-export type InputType = 'text' | 'password' | 'email' | 'number'
+export type InputType = 'text' | 'password' | 'email' | 'number' | 'file' | 'checkbox'
 export type InputState = 'default' | 'error' | 'success' | 'validating'
 
 export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size'> {

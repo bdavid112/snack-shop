@@ -1,0 +1,41 @@
+@layer components {
+  .zui-check-box {
+    @apply inline-flex items-center gap-2 m-0;
+
+    .zui-check-box-input {
+      @apply sr-only; /* Hide native checkbox but keep it accessible */
+    }
+
+    .zui-check-box-custom {
+      @apply h-4 w-4 rounded-sm border border-[var(--zui-border-primary)] flex items-center justify-center;
+      @apply transition-colors duration-200;
+
+      background-color: white;
+    }
+
+    .check-icon {
+      @apply hidden w-3 h-3 text-white;
+    }
+
+    /* Show checkmark when checked */
+    .zui-check-box-input:checked + .zui-check-box-custom {
+      @apply bg-[var(--zui-primary-base-sm)] border-transparent;
+    }
+
+    .zui-check-box-input:checked + .zui-check-box-custom .check-icon {
+      @apply block;
+    }
+
+    .zui-check-box-input:focus + .zui-check-box-custom {
+      @apply ring-2 ring-offset-1 ring-[var(--zui-primary-base-sm)];
+    }
+
+    .zui-check-box-input:disabled + .zui-check-box-custom {
+      @apply border-[var(--zui-border-muted)] bg-[var(--zui-surface-10)] cursor-not-allowed;
+    }
+
+    .zui-check-box-label {
+      @apply text-sm;
+    }
+  }
+}

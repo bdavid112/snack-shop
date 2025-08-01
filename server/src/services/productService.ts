@@ -1,5 +1,5 @@
 import { FastifyInstance } from 'fastify'
-import { ProductInput } from '@shared/schemas/product'
+import { ProductCreateInput, ProductInput } from '@shared/schemas/product'
 
 /* Get product by its ID */
 export async function getProduct(app: FastifyInstance, productId: number) {
@@ -14,7 +14,7 @@ export async function getAllProducts(app: FastifyInstance) {
 }
 
 /* Create product */
-export async function createProduct(app: FastifyInstance, input: ProductInput) {
+export async function createProduct(app: FastifyInstance, input: ProductCreateInput) {
   const { name } = input
 
   // Check for existing product
@@ -31,7 +31,11 @@ export async function createProduct(app: FastifyInstance, input: ProductInput) {
 }
 
 /* Update product */
-export async function updateProduct(app: FastifyInstance, productId: number, input: ProductInput) {
+export async function updateProduct(
+  app: FastifyInstance,
+  productId: number,
+  input: ProductCreateInput
+) {
   // Try to retrieve product by its ID
   const product = await getProduct(app, productId)
 

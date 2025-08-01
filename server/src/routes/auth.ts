@@ -1,12 +1,27 @@
 import { FastifyInstance } from 'fastify'
-import { loginUser, registerUser } from '@services/userService'
-import { authMiddleware } from '@plugins/authMiddleware'
+import { getUsers, loginUser, registerUser } from '@services/userService'
+import { authMiddleware, requireAdmin } from '@plugins/authMiddleware'
 import { handleError } from '@utils/handleError'
 import { validateRequest } from '@utils/validate'
 import { UserInput, UserSchema } from '@shared/schemas/user'
 
 /* eslint-disable @typescript-eslint/require-await */
 export async function authRoutes(app: FastifyInstance) {
+  /* Get users (admin-only) */
+  app.get('/users', async (req, reply) => {
+    requireAdmin(req, reply)
+    if (reply.sent) return
+
+    try {
+      const result = await getUsers(app)
+
+      /* Respond with success */
+      return reply.status(200).send(result)
+    } catch (err) {
+      handleError(err, req, reply)
+    }
+  })
+
   /* Register a new user */
   app.post('/register', async (req, reply) => {
     // Validate req body

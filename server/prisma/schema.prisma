@@ -31,6 +31,7 @@ model Order {
   id         Int         @id @default(autoincrement())
   user_id    Int
   total      Int
+  status     String      @default("pending") // "pending" = cart, "completed" = finalized order
   created_at DateTime    @default(now())
   user       User        @relation(fields: [user_id], references: [id], onDelete: Cascade)
   items      OrderItem[]

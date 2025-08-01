@@ -15,7 +15,8 @@
       "@types/*": ["src/types/*"],
       "@utils/*": ["src/utils/*"],
       "@context/*": ["src/context/*"],
-      "@shared/*": ["../shared/*"]
+      "@shared/*": ["../shared/*"],
+      "@public/*": ["public/*"]
     }
   },
   "files": ["src/types/fastify.d.ts"],

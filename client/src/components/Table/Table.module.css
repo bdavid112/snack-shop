@@ -1,0 +1,59 @@
+@layer components {
+  /* === Variants === */
+
+  /* Base styling */
+
+  .zui-table {
+    @apply flex flex-col rounded-md;
+  }
+  .zui-table-header {
+    @apply px-6 py-3 text-[var(--zui-text-secondary)] text-sm leading-sm border-b border-[var(--zui-border-muted)] bg-[var(--zui-surface-10)] rounded-t-md;
+
+    tr {
+      @apply flex items-center;
+
+      th {
+        @apply text-left;
+      }
+    }
+  }
+  .zui-table-body {
+    @apply text-[var(--zui-text-secondary)] text-sm leading-sm bg-[var(--zui-surface-10)];
+
+    tr {
+      @apply px-6 py-3 flex items-center even:bg-[var(--zui-surface-100)] not-first:hover:bg-[var(--zui-surface-1000)] transition-colors duration-100;
+
+      td {
+        @apply text-left;
+      }
+    }
+  }
+  .zui-table-footer {
+    @apply px-6 py-3 text-[var(--zui-text-secondary)] text-sm leading-sm border-t border-[var(--zui-border-muted)] bg-[var(--zui-surface-10)] rounded-b-md;
+
+    tr {
+      @apply flex items-center;
+
+      td {
+        @apply text-left;
+      }
+    }
+  }
+
+  .zui-table--outlined {
+    @apply border border-[var(--zui-border-muted)];
+  }
+
+  .zui-table--elevated {
+    @apply shadow-md bg-[var(--zui-surface-10)];
+  }
+
+  /* === Theme related styling === */
+
+  :root, /* Fallback */
+  [data-theme='light'] {
+  }
+
+  [data-theme='dark'] {
+  }
+}

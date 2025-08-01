@@ -4,6 +4,9 @@ import { ProtectedRoute } from './components/ProtectedRoute'
 import ProductsPage from './pages/ProductsPage'
 import { Layout } from '@layouts/Layout'
 import RegisterPage from '@pages/RegisterPage'
+import { UsersPage } from '@pages/UsersPage'
+import { OrdersPage } from '@pages/OrdersPage'
+import CartPage from '@pages/CartPage'
 
 function App() {
   return (
@@ -17,6 +20,36 @@ function App() {
           <ProtectedRoute>
             <Layout>
               <ProductsPage />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/orders"
+        element={
+          <ProtectedRoute>
+            <Layout>
+              <OrdersPage />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/users"
+        element={
+          <ProtectedRoute>
+            <Layout>
+              <UsersPage />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/cart"
+        element={
+          <ProtectedRoute>
+            <Layout>
+              <CartPage />
             </Layout>
           </ProtectedRoute>
         }

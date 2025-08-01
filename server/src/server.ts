@@ -1,11 +1,14 @@
 import Fastify from 'fastify'
 import cookie from 'fastify-cookie'
+import multipart from '@fastify/multipart'
 import * as signature from 'cookie-signature'
 import cors from '@fastify/cors'
 import { authRoutes } from '@routes/auth'
 import { prisma } from './plugins'
-import { orderRoutes } from '@routes/orders'
+import { cartRoutes, orderRoutes } from '@routes/orders'
 import { productRoutes } from '@routes/products'
+import fastifyStatic from '@fastify/static'
+import path from 'path'
 
 export async function buildServer() {
   const app = Fastify({
@@ -19,6 +22,7 @@ export async function buildServer() {
   app.register(cors, {
     origin: process.env.FRONTEND_ORIGIN || 'http://localhost:5173',
     credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   })
 
   /* Override Cookie signing for testing */
@@ -44,11 +48,17 @@ export async function buildServer() {
   })
 
   app.register(prisma)
+  app.register(multipart)
+  app.register(fastifyStatic, {
+    root: path.join(process.cwd(), 'public'),
+    prefix: '/',
+  })
 
   /* Register routes */
   app.register(authRoutes, { prefix: '/api' })
   app.register(productRoutes, { prefix: '/api' })
   app.register(orderRoutes, { prefix: '/api' })
+  app.register(cartRoutes, { prefix: '/api' })
 
   await app.ready()
 

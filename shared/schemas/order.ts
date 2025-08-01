@@ -13,14 +13,14 @@ export const OrderItemResponseSchema = OrderItemSchema.extend({
 })
 
 // OrderItem + product info
-export const OrderItemWithProductSchema = OrderItemSchema.extend({
+export const OrderItemWithProductSchema = OrderItemResponseSchema.extend({
   product: ProductResponseSchema,
 })
-
-// Order input schema (for creating orders)
+// Order input schema (for creating orders or cart)
 export const OrderSchema = z.object({
   user_id: z.number().int().positive(),
   total: z.number().int().nonnegative(),
+  status: z.enum(['cart', 'completed']).default('cart'), // added status
   items: z.array(OrderItemSchema).nonempty(),
 })
 
@@ -35,4 +35,4 @@ export type OrderInput = z.infer<typeof OrderSchema>
 export type OrderResponse = z.infer<typeof OrderResponseSchema>
 export type OrderItemInput = z.infer<typeof OrderItemSchema>
 export type OrderItemResponse = z.infer<typeof OrderItemResponseSchema>
-export type OrderItemWithProduct = z.infer<typeof OrderItemWithProductSchema>
+export type CartItemResponse = z.infer<typeof OrderItemWithProductSchema>

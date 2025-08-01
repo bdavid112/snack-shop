@@ -6,17 +6,13 @@
     label {
       @apply text-label leading-label font-medium mb-0;
     }
-
-    input {
-      @apply rounded-sm;
-    }
   }
 
   .zui-input-field-wrapper {
     @apply relative;
 
     input {
-      @apply relative w-full outline-none transition-all duration-75 caret-[var(--zui-state-info)];
+      @apply relative w-full outline-none transition-all duration-75 caret-[var(--zui-state-info)] rounded-sm;
       z-index: 100;
     }
 
@@ -84,12 +80,16 @@
     @apply bg-[var(--zui-surface-100)] border border-transparent;
 
     &:not([disabled]) {
-      @apply hover:bg-[var(--zui-surface-1000)] focus:bg-[var(--zui-surface-1000)] rounded-b-none;
+      @apply hover:bg-[var(--zui-surface-1000)] focus:bg-[var(--zui-surface-1000)] focus:rounded-b-none;
     }
 
     &:where([disabled]) {
       @apply bg-[var(--zui-surface-10)] hover:cursor-not-allowed;
     }
+  }
+
+  .zui-upload-area {
+    @apply flex flex-col items-center justify-center rounded-sm bg-[var(--zui-surface-100)] hover:bg-[var(--zui-surface-1000)] cursor-pointer h-12 w-12;
   }
 
   /* Disabled state */

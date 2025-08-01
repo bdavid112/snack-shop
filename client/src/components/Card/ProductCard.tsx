@@ -5,12 +5,22 @@ import clsx from 'clsx'
 import { Button } from '@components/Button'
 import { useState } from 'react'
 import { getStockInfo } from '@utils/stock'
+import { useCartApi } from '@hooks/useCartApi'
 
 // Main component
 export const ProductCard = ({ product, className, ...props }: ProductCardProps) => {
-  const { name, price, stock, description, discount, image_url } = product
-
+  const { id, name, price, stock, description, discount, image_url } = product
   const [quantity, setQuantity] = useState(1)
+  const { addItemToCart } = useCartApi()
+
+  const handleAddToCart = async () => {
+    try {
+      await addItemToCart(id, quantity)
+      alert('Added to cart!')
+    } catch {
+      alert('Failed to add to cart.')
+    }
+  }
 
   // Give stock information to users
   const remainingStock = stock - quantity
@@ -21,14 +31,14 @@ export const ProductCard = ({ product, className, ...props }: ProductCardProps) 
       <CardHeader>
         {image_url && (
           <img
-            src={image_url}
+            src={`http://localhost:3000/${image_url}`}
             alt={name}
             className="object-cover w-[300px] h-[300px] mix-blend-darken mb-6"
           />
         )}
         <div className="text-pretty">
-          <p className="mb-0 font-bold text-h6 leading-h6">{name}</p>
-          <small className="text-[var(--zui-text-secondary)] leading-sm">{description}</small>
+          <p className="h-12 mb-0 font-bold text-h6 leading-h6 ">{name}</p>
+          <small className="text-[var(--zui-text-secondary)]">{description}</small>
         </div>
       </CardHeader>
       <CardBody>
@@ -39,10 +49,13 @@ export const ProductCard = ({ product, className, ...props }: ProductCardProps) 
         </div>
         <div className="flex items-end justify-between">
           <div className="flex gap-2">
-            <p className="mb-0 font-semibold">${(price * quantity) / 100}</p>
-            {discount && (
-              <p className="mb-0 font text-[var(--zui-text-muted)] line-through">
-                ${(price * discount * quantity) / 10000}
+            <p className="mb-0 font-semibold">
+              ${((price * quantity * (1 - (discount ?? 0) / 100)) / 100).toFixed(2)}
+            </p>
+
+            {discount && discount > 0 && (
+              <p className="mb-0 text-[var(--zui-text-muted)] line-through">
+                ${((price * quantity) / 100).toFixed(2)}
               </p>
             )}
           </div>
@@ -50,7 +63,7 @@ export const ProductCard = ({ product, className, ...props }: ProductCardProps) 
         </div>
       </CardBody>
       <CardFooter>
-        <Button shape="pill" size="sm" className="w-full">
+        <Button shape="pill" size="sm" className="w-full" onClick={handleAddToCart}>
           Add to Cart
         </Button>
       </CardFooter>

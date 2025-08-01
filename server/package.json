@@ -13,6 +13,8 @@
   "type": "commonjs",
   "dependencies": {
     "@fastify/cors": "^11.0.1",
+    "@fastify/multipart": "^9.0.3",
+    "@fastify/static": "^8.2.0",
     "@prisma/client": "^6.13.0",
     "bcrypt": "^6.0.0",
     "dotenv": "^17.2.1",
