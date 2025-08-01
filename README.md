@@ -162,9 +162,3 @@ npm run dev
 ```
 
 Linting and formatting are enforced using ESLint and Prettier.
-
----
-
-## 📄 License
-
-MIT
